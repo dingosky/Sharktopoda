@@ -126,7 +126,8 @@ extension WindowData {
   }
   
   func step(_ steps: Int) {
-    let stepTime = currentFrameTime + steps * localizationData.frameDuration
+    let delta = Int(Float(steps) * localizationData.videoAsset.frameRate)
+    let stepTime = currentFrameTime + delta
     seek(elapsedTime: stepTime)
   }
 }

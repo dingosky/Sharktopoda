@@ -15,12 +15,16 @@ extension LocalizationData {
   
   func frameNumber(of elapsedTime: Int) -> Int {
     guard 0 < elapsedTime else { return 0 }
-    
-    return (elapsedTime + frameDuration / 2) / frameDuration
+
+    return Int(round(Float(elapsedTime) / frameDuration))
+  }
+  
+  func frameTime(for frameNumber: Int) -> Int {
+    return Int(Float(frameNumber) * frameDuration + frameDuration / 2.0)
   }
   
   func frameTime(of elapsedTime: Int) -> Int {
-    frameNumber(of: elapsedTime) * frameDuration
+    return frameTime(for: frameNumber(of: elapsedTime))
   }
   
   var timeWindow: Int {
@@ -176,7 +180,7 @@ extension LocalizationData {
              at insertTime: Int) -> PutInfo {
     
     let frameNumber = frameNumber(of: insertTime)
-    let frameTime = frameNumber * frameDuration
+    let frameTime = frameTime(for: frameNumber)
     
     var frame: LocalizationFrame
     var action: PutAction

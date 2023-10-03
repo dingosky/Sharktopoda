@@ -23,11 +23,13 @@ class LocalizationData {
   var selected = Set<String>()
 
   let id: String
-  let frameDuration: Int
+  let videoAsset: VideoAsset
+  let frameDuration: Float
   
-  init(id: String, frameDuration: Int) {
-    self.id = id
-    self.frameDuration = frameDuration
+  init(for videoAsset: VideoAsset) {
+    self.id = videoAsset.id
+    self.videoAsset = videoAsset
+    self.frameDuration = 1000.0 / videoAsset.frameRate
   }
 }
 
