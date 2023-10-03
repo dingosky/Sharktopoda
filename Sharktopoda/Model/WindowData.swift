@@ -13,6 +13,7 @@ final class WindowData: Identifiable, ObservableObject {
   var windowKeyInfo: WindowKeyInfo = WindowKeyInfo()
   
   var _frameDuration: CMTime?
+  var _frameRate: Float?
   var _fullSize: CGSize?
   var _localizationData: LocalizationData?
   var _player: AVPlayer?
@@ -44,7 +45,12 @@ final class WindowData: Identifiable, ObservableObject {
     get { _frameDuration! }
     set { _frameDuration = newValue }
   }
-  
+
+  var frameRate: Float {
+    get { _frameRate! }
+    set { _frameRate = newValue }
+  }
+
   var fullSize: CGSize {
     get { _fullSize! }
     set { _fullSize = newValue }

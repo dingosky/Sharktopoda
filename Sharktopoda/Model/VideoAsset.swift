@@ -44,10 +44,7 @@ final class VideoAsset {
       }
 
       duration = try await avAsset.load(.duration)
-      frameRate = try await videoTrack.load(.nominalFrameRate)
-      
-      // CxTBD Remove frameDuration
-      frameDuration = try await videoTrack.load(.minFrameDuration)
+      (frameRate, frameDuration) = try await videoTrack.load(.nominalFrameRate, .minFrameDuration)
 
       let (videoPreferredTransform, videoNaturalSize) =
         try await videoTrack.load(.preferredTransform, .naturalSize)
