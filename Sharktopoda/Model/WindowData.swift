@@ -51,11 +51,6 @@ final class WindowData: Identifiable, ObservableObject {
     set { _frameRate = newValue }
   }
 
-  var fullSize: CGSize {
-    get { _fullSize! }
-    set { _fullSize = newValue }
-  }
-  
   var localizationData: LocalizationData {
     get { _localizationData! }
     set { _localizationData = newValue }
@@ -151,7 +146,7 @@ extension WindowData {
     let currentFrameNumber = localizationData.frameNumber(of: videoControl.currentTime)
 
     let frameLocalizations = controlLocalizations
-      .map { Localization(from: $0, size: fullSize) }
+      .map { Localization(from: $0, size: videoAsset.fullSize) }
       .reduce(into: [Localization]()) { acc, localization in
         localization.resize(for: playerView.videoRect)
         localizationData.add(localization)

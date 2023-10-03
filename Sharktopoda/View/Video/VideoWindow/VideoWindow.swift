@@ -49,7 +49,6 @@ final class VideoWindow: NSWindow {
     windowData.id = videoAsset.id
 
     windowData.frameDuration = frameDuration
-    windowData.fullSize = videoAsset.fullSize
     windowData.localizationData = LocalizationData(id: videoAsset.id,
                                                    frameDuration: frameDuration.asMillis())
     windowData.player = AVPlayer(playerItem: playerItem)
