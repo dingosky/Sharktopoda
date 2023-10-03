@@ -22,7 +22,7 @@ final class VideoControl {
 
     let quickMillis = min(windowData.videoAsset.duration.asMillis() / 500, 500)
     quickTolerance = CMTime.fromMillis(quickMillis)
-    seekTolerance = CMTimeMultiplyByFloat64(windowData.frameDuration, multiplier: 0.45)
+    seekTolerance = CMTimeMultiplyByFloat64(windowData.videoAsset.frameDuration, multiplier: 0.45)
   }
   
   func canStep(_ steps: Int) -> Bool {

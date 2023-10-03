@@ -41,16 +41,6 @@ final class WindowData: Identifiable, ObservableObject {
     set { _id = newValue }
   }
   
-  var frameDuration: CMTime {
-    get { _frameDuration! }
-    set { _frameDuration = newValue }
-  }
-
-  var frameRate: Float {
-    get { _frameRate! }
-    set { _frameRate = newValue }
-  }
-
   var localizationData: LocalizationData {
     get { _localizationData! }
     set { _localizationData = newValue }
