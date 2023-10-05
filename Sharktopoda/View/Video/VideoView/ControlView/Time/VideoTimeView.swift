@@ -19,7 +19,7 @@ struct VideoTimeView: View {
       VideoTimeSlider()
         .frame(height: 20)
 
-      Text(humanTime(windowData.videoAsset.durationMillis - windowData.playerTime))
+      Text(humanTime(windowData.videoAsset.duration.asMillis - windowData.playerTime))
         .padding(.trailing, 5)
         .frame(width: 80)
     }

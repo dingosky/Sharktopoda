@@ -16,7 +16,7 @@ final class NSTimeSlider: NSView {
   let markerLayer = CALayer()
 
   var duration: Int {
-    windowData.videoAsset.durationMillis
+    windowData.videoAsset.duration.asMillis
   }
   
   /// Hold current player direction during slider scrubbing

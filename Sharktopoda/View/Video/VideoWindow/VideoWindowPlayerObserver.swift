@@ -18,7 +18,7 @@ extension VideoWindow {
       DispatchQueue.main.async { [weak windowData] in
         guard let windowData else { return }
 
-        windowData.playerTime = time.asMillis()
+        windowData.playerTime = time.asMillis
 
         windowData.playerView.clear()
         windowData.displaySpanned()

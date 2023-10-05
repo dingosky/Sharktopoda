@@ -20,7 +20,7 @@ final class VideoControl {
   init (windowData: WindowData) {
     self.windowData = windowData
 
-    let quickMillis = min(windowData.videoAsset.duration.asMillis() / 500, 500)
+    let quickMillis = min(windowData.videoAsset.duration.asMillis / 500, 500)
     quickTolerance = CMTime.fromMillis(quickMillis)
     seekTolerance = CMTimeMultiplyByFloat64(windowData.videoAsset.frameDuration, multiplier: 0.45)
   }
@@ -35,7 +35,7 @@ final class VideoControl {
   }
   
   var currentTime: Int {
-    player.currentItem?.currentTime().asMillis() ?? -1
+    player.currentItem?.currentTime().asMillis ?? -1
   }
 
   func pause() {

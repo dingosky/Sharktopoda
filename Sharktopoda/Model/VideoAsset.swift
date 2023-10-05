@@ -10,7 +10,6 @@ import AVFoundation
 // CxNote Binds to first AVAsset video track
 
 final class VideoAsset {
-  static let timescaleMillis: Int32 = 1000
   
   let id: String
   let url: URL
@@ -22,9 +21,9 @@ final class VideoAsset {
   var frameRate: Float
   var fullSize: NSSize
   
-  var durationMillis: Int {
-    duration.asMillis()
-  }
+//  var durationMillis: Int {
+//    duration.asMillis
+//  }
   
   init(id: String, url: URL) async throws {
     self.id = id
