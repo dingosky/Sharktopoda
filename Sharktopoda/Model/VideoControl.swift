@@ -21,7 +21,7 @@ final class VideoControl {
     self.windowData = windowData
 
     let quickMillis = min(windowData.videoAsset.duration.asMillis / 500, 500)
-    quickTolerance = CMTime.fromMillis(quickMillis)
+    quickTolerance = CMTime.from(quickMillis, in: .millis)
     seekTolerance = CMTimeMultiplyByFloat64(windowData.videoAsset.frameDuration, multiplier: 0.45)
   }
   
@@ -78,28 +78,23 @@ final class VideoControl {
   }
   
   func frameSeek(to elapsedTime: Int) {
-    frameSeek(to: CMTime.fromMillis(elapsedTime))
-  }
-  
-  func frameSeek(to time: CMTime) {
-    let frameMillis = windowData.localizationData.frameTime(of: time.asMillis())
-    let frameTime = CMTime.fromMillis(frameMillis)
-    player.seek(to: frameTime,
+    player.seek(to: CMTime.from(elapsedTime, in: .millis),
                 toleranceBefore: seekTolerance,
                 toleranceAfter: seekTolerance)
   }
   
-  func frameSeek(to elapsedTime: Int, done: @escaping (Bool) -> Void) {
-    frameSeek(to: CMTime.fromMillis(elapsedTime), done: done)
+  func frameSeek(to time: CMTime) {
+    frameSeek(to: time.asMillis)
   }
-
-  func frameSeek(to time: CMTime, done: @escaping (Bool) -> Void) {
-    let frameMillis = windowData.localizationData.frameTime(of: time.asMillis())
-    let frameTime = CMTime.fromMillis(frameMillis)
-
-    player.seek(to: frameTime,
+  
+  func frameSeek(to elapsedTime: Int, done: @escaping (Bool) -> Void) {
+    player.seek(to: CMTime.from(elapsedTime, in: .millis),
                 toleranceBefore: seekTolerance,
                 toleranceAfter: seekTolerance,
                 completionHandler: done)
+  }
+
+  func frameSeek(to time: CMTime, done: @escaping (Bool) -> Void) {
+    frameSeek(to: time.asMillis, done: done)
   }
 }

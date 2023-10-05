@@ -35,14 +35,8 @@ extension CMTime {
     to(.millis)
   }
   
-  static func fromMillis(_ time: Double) -> CMTime {
-    guard !time.isNaN,
-          !time.isInfinite else { return .zero }
-    
-    return fromMillis(Int(time))
+  var asMicros: Int {
+    to(.micros)
   }
-  
-  static func fromMillis(_ time: Int) -> CMTime {
-    CMTimeMake(value: Int64(time), timescale: CMTime.valueMillis)
-  }
+
 }

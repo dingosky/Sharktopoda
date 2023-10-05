@@ -63,6 +63,6 @@ extension NSTimeSlider {
   
   private func sliderTime(for event: NSEvent) -> CMTime {
     let sliderPoint = location(in: layer!, of: event)
-    return CMTime.fromMillis(Double(duration) * (sliderPoint.x / bounds.width))
+    return CMTime.from(Double(duration) * (sliderPoint.x / bounds.width), in: .millis)
   }
 }
