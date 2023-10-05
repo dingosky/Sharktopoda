@@ -77,10 +77,6 @@ extension WindowData {
     step(steps)
   }
   
-  var currentFrameTime: Int {
-    localizationData.frameTime(of: videoControl.currentTime)
-  }
-  
   func pause(_ withDisplay: Bool = true) {
     let currentTime = videoControl.currentTime
 

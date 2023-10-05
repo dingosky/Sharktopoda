@@ -15,16 +15,16 @@ extension LocalizationData {
   
   func frameNumber(of elapsedTime: Int) -> Int {
     guard 0 < elapsedTime else { return 0 }
-
+    
     return Int(round(Float(elapsedTime) / frameDuration))
   }
   
-  func frameTime(for frameNumber: Int) -> Int {
-    return Int(Float(frameNumber) * frameDuration + frameDuration / 2.0)
+  func localizationTime(for frameNumber: Int) -> Int {
+    return Int(round(Float(frameNumber) * frameDuration))
   }
   
-  func frameTime(of elapsedTime: Int) -> Int {
-    return frameTime(for: frameNumber(of: elapsedTime))
+  func localizationTime(of elapsedTime: Int) -> Int {
+    return localizationTime(for: frameNumber(of: elapsedTime))
   }
   
   var timeWindow: Int {
@@ -71,9 +71,9 @@ extension LocalizationData {
 // MARK: Forward frames
 extension LocalizationData {
   func forwardFrameInsert(_ localization: Localization) {
-    let frameTime = forwardFrameTime(localization)
+    let localizationTime = forwardLocalizationTime(localization)
     
-    let (frame, action, index) = frame(for: localization, into: forwardFrames, at: frameTime)
+    let (frame, action, index) = frame(for: localization, into: forwardFrames, at: localizationTime)
     
     switch action {
       case .add:
@@ -84,9 +84,9 @@ extension LocalizationData {
   }
   
   func forwardFrameRemove(_ localization: Localization) {
-    let frameTime = forwardFrameTime(localization)
+    let localizationTime = forwardLocalizationTime(localization)
     
-    let index = insertionIndex(for: forwardFrames, at: frameTime)
+    let index = insertionIndex(for: forwardFrames, at: localizationTime)
     guard index != forwardFrames.count else { return }
     
     var frame = forwardFrames[index]
@@ -101,7 +101,7 @@ extension LocalizationData {
     }
   }
   
-  private func forwardFrameTime(_ localization: Localization) -> Int {
+  private func forwardLocalizationTime(_ localization: Localization) -> Int {
     let elapsed = localization.elapsedTime
     return useDuration ? elapsed : elapsed - (timeWindow / 2)
   }
@@ -110,7 +110,7 @@ extension LocalizationData {
 // MARK: Reverse frames
 extension LocalizationData {
   func reverseFrameInsert(_ localization: Localization) {
-    let insertTime = reverseFrameTime(localization)
+    let insertTime = reverseLocalizationTime(localization)
     
     let (frame, action, index) = frame(for: localization, into: reverseFrames, at: insertTime)
     switch action {
@@ -122,9 +122,9 @@ extension LocalizationData {
   }
   
   func reverseFrameRemove(_ localization: Localization) {
-    let frameTime = reverseFrameTime(localization)
+    let localizationTime = reverseLocalizationTime(localization)
     
-    let index = insertionIndex(for: reverseFrames, at: frameTime)
+    let index = insertionIndex(for: reverseFrames, at: localizationTime)
     guard index != reverseFrames.count else { return }
     
     var frame = reverseFrames[index]
@@ -139,7 +139,7 @@ extension LocalizationData {
     }
   }
   
-  private func reverseFrameTime(_ localization: Localization) -> Int {
+  private func reverseLocalizationTime(_ localization: Localization) -> Int {
     let elapsed = localization.elapsedTime
     let duration = localization.duration
     
@@ -180,7 +180,7 @@ extension LocalizationData {
              at insertTime: Int) -> PutInfo {
     
     let frameNumber = frameNumber(of: insertTime)
-    let frameTime = frameTime(for: frameNumber)
+    let localizationTime = localizationTime(for: frameNumber)
     
     var frame: LocalizationFrame
     var action: PutAction
@@ -188,7 +188,7 @@ extension LocalizationData {
     
     /// If no frames yet, insert at 0
     if frames.isEmpty {
-      frame = LocalizationFrame(number: frameNumber, time: frameTime)
+      frame = LocalizationFrame(number: frameNumber, time: localizationTime)
       action = .insert
       index = 0
     } else {
@@ -196,7 +196,7 @@ extension LocalizationData {
       index = insertionIndex(for: frames, at: insertTime)
       /// If after end, insert there
       if index == frames.count {
-        frame = LocalizationFrame(number: frameNumber, time: frameTime)
+        frame = LocalizationFrame(number: frameNumber, time: localizationTime)
         action = .insert
       } else {
         /// Fetch the frame at the insert index
@@ -206,7 +206,7 @@ extension LocalizationData {
           action = .add
         } else {
           /// else insert at index
-          frame = LocalizationFrame(number: frameNumber, time: frameTime)
+          frame = LocalizationFrame(number: frameNumber, time: localizationTime)
           action = .insert
         }
       }

@@ -39,8 +39,8 @@ extension NSTimeSlider {
   override func mouseUp(with event: NSEvent) {
     windowData.playerView.clear()
     
-    let frameTime = sliderTime(for: event)
-    windowData.videoControl.frameSeek(to: frameTime) { [weak self] done in
+    let elapsedTime = sliderTime(for: event)
+    windowData.videoControl.frameSeek(to: elapsedTime) { [weak self] done in
       guard done else { return }
       guard let self = self else { return }
       guard let playerDirection = self.playerDirection else { return }
