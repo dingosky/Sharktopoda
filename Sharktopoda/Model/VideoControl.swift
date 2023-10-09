@@ -22,7 +22,8 @@ final class VideoControl {
 
     let quickMillis = min(windowData.videoAsset.duration.asMillis / 500, 500)
     quickTolerance = CMTime.from(quickMillis, in: .millis)
-    seekTolerance = CMTimeMultiplyByFloat64(windowData.videoAsset.frameDuration, multiplier: 0.45)
+    let frameDurationTime = CMTime.from(windowData.videoAsset.frameMillis, in: .millis)
+    seekTolerance = CMTimeMultiplyByFloat64(frameDurationTime, multiplier: 0.25)
   }
   
   func canStep(_ steps: Int) -> Bool {
@@ -34,8 +35,8 @@ final class VideoControl {
     player.currentItem
   }
   
-  var currentTime: Int {
-    player.currentItem?.currentTime().asMillis ?? -1
+  var currentTime: CMTime {
+    player.currentItem?.currentTime() ?? CMTime.invalid
   }
 
   func pause() {
@@ -77,24 +78,24 @@ final class VideoControl {
                 toleranceAfter: quickTolerance)
   }
   
-  func frameSeek(to elapsedTime: Int) {
-    player.seek(to: CMTime.from(elapsedTime, in: .millis),
+  func frameSeek(to time: CMTime) {
+    player.seek(to: time,
                 toleranceBefore: seekTolerance,
                 toleranceAfter: seekTolerance)
   }
-  
-  func frameSeek(to time: CMTime) {
-    frameSeek(to: time.asMillis)
+
+  func frameSeek(to elapsedTime: Int) {
+    frameSeek(to: CMTime.from(elapsedTime, in: .millis))
   }
   
-  func frameSeek(to elapsedTime: Int, done: @escaping (Bool) -> Void) {
-    player.seek(to: CMTime.from(elapsedTime, in: .millis),
+  func frameSeek(to time: CMTime, done: @escaping (Bool) -> Void) {
+    player.seek(to: time,
                 toleranceBefore: seekTolerance,
                 toleranceAfter: seekTolerance,
                 completionHandler: done)
   }
-
-  func frameSeek(to time: CMTime, done: @escaping (Bool) -> Void) {
-    frameSeek(to: time.asMillis, done: done)
+  
+  func frameSeek(to elapsedTime: Int, done: @escaping (Bool) -> Void) {
+    frameSeek(to: CMTime.from(elapsedTime, in: .millis), done: done)
   }
 }

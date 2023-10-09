@@ -24,12 +24,10 @@ class LocalizationData {
 
   let id: String
   let videoAsset: VideoAsset
-  let frameDuration: Float
   
   init(for videoAsset: VideoAsset) {
     self.id = videoAsset.id
     self.videoAsset = videoAsset
-    self.frameDuration = 1000.0 / videoAsset.frameRate
   }
 }
 

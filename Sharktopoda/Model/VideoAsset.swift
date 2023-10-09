@@ -17,14 +17,9 @@ final class VideoAsset {
   var avAsset: AVURLAsset
 
   var duration: CMTime
-  var frameDuration: CMTime
   var frameRate: Float
+  var frameMillis: Float
   var fullSize: NSSize
-  
-//  var durationMillis: Int {
-//    duration.asMillis
-//  }
-  
   init(id: String, url: URL) async throws {
     self.id = id
     self.url = url
@@ -43,7 +38,9 @@ final class VideoAsset {
       }
 
       duration = try await avAsset.load(.duration)
-      (frameRate, frameDuration) = try await videoTrack.load(.nominalFrameRate, .minFrameDuration)
+
+      frameRate = try await videoTrack.load(.nominalFrameRate)
+      frameMillis = 1000.0 / frameRate
 
       let (videoPreferredTransform, videoNaturalSize) =
         try await videoTrack.load(.preferredTransform, .naturalSize)
@@ -55,17 +52,17 @@ final class VideoAsset {
     }
   }
   
-  func frameGrab(at captureTime: Int, destination: String) async -> FrameGrabResult {
+  func frameGrab(millis captureMillis: Int, destination: String) async -> FrameGrabResult {
     let imageGenerator = AVAssetImageGenerator(asset: avAsset)
     imageGenerator.requestedTimeToleranceAfter = CMTime.zero
     imageGenerator.requestedTimeToleranceBefore = CMTime.zero
 
     do {
-      let (cgImage, _) = try await imageGenerator.image(at:  CMTime.from(captureTime, in: .millis))
+      let (cgImage, _) = try await imageGenerator.image(at: CMTime.from(captureMillis, in: .millis))
       if let error = cgImage.pngWrite(to: destination) {
         return .failure(error)
       } else {
-        return .success(captureTime)
+        return .success(captureMillis)
       }
     } catch(let error) {
       return .failure(error)

@@ -12,7 +12,6 @@ final class WindowData: Identifiable, ObservableObject {
   
   var windowKeyInfo: WindowKeyInfo = WindowKeyInfo()
   
-  var _frameDuration: CMTime?
   var _frameRate: Float?
   var _fullSize: CGSize?
   var _localizationData: LocalizationData?
@@ -78,16 +77,17 @@ extension WindowData {
   }
   
   func pause(_ withDisplay: Bool = true) {
-    let currentTime = videoControl.currentTime
-
     guard !videoControl.paused else { return }
 
     play(rate: 0.0)
-    videoControl.frameSeek(to: currentTime) { [weak self] done in
-      if withDisplay {
-        self?.displaySpanned()
-      }
-    }
+    displaySpanned()
+
+//    let currentTime = videoControl.currentTime
+//    videoControl.frameSeek(to: currentTime) { [weak self] done in
+//      if withDisplay {
+//        self?.displaySpanned()
+//      }
+//    }
   }
   
   func play(rate: Float) {
@@ -120,17 +120,23 @@ extension WindowData {
     }
     videoControl.frameSeek(to: elapsedTime)
   }
+
+  func seek(time: CMTime) {
+    if !videoControl.paused {
+      play(rate: 0.0)
+    }
+    videoControl.frameSeek(to: time)
+  }
   
   func step(_ steps: Int) {
-    let currentTime = videoControl.currentTime
-    let delta = Int(round(Float(steps) * localizationData.frameDuration))
-    seek(elapsedTime: currentTime + delta)
+    let delta = Int(round(Float(steps) * videoAsset.frameMillis))
+    seek(time: videoControl.currentTime + CMTime.from(delta, in: .millis))
   }
 }
 
 extension WindowData {
   func add(localizations controlLocalizations: [ControlLocalization]) {
-    let currentFrameNumber = localizationData.frameNumber(of: videoControl.currentTime)
+    let currentFrameNumber = localizationData.frameNumber(of: videoControl.currentTime.asMillis)
 
     let frameLocalizations = controlLocalizations
       .map { Localization(from: $0, size: videoAsset.fullSize) }
@@ -149,7 +155,7 @@ extension WindowData {
   }
   
   func pausedLocalizations() -> [Localization] {
-    localizationData.fetch(.paused, at: videoControl.currentTime)
+    localizationData.fetch(.paused, at: videoControl.currentTime.asMillis)
   }
 
   func displaySpanned(force: Bool = true) {
@@ -164,7 +170,7 @@ extension WindowData {
       return pausedLocalizations()
     }
 
-    return localizationData.fetch(spanning: videoControl.currentTime)
+    return localizationData.fetch(spanning: videoControl.currentTime.asMillis)
   }
 }
 

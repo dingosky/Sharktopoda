@@ -67,7 +67,7 @@ extension NSPlayerView {
     windowData.videoControl.currentItem
   }
   
-  var currentTime: Int {
+  var currentTime: CMTime {
     windowData.videoControl.currentTime
   }
   

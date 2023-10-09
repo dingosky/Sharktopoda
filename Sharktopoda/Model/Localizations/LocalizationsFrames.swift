@@ -16,11 +16,11 @@ extension LocalizationData {
   func frameNumber(of elapsedTime: Int) -> Int {
     guard 0 < elapsedTime else { return 0 }
     
-    return Int(round(Float(elapsedTime) / frameDuration))
+    return Int(round(Float(elapsedTime) / videoAsset.frameMillis))
   }
   
   func localizationTime(for frameNumber: Int) -> Int {
-    return Int(round(Float(frameNumber) * frameDuration))
+    return Int(round(Float(frameNumber) * videoAsset.frameMillis))
   }
   
   func localizationTime(of elapsedTime: Int) -> Int {

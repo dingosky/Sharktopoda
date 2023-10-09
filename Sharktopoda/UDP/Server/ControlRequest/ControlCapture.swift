@@ -18,8 +18,8 @@ struct ControlCapture: ControlMessage {
   
   func process() -> ControlResponse {
     withWindowData(id: uuid) { windowData in
-      // CxNote Capture current time to get frame as close to command request as possible.
-      let captureTime = windowData.videoControl.currentTime
+      // CxNote Capture current time to get millis as close to command request as possible.
+      let captureTime = windowData.videoControl.currentTime.asMillis
 
       let fileUrl = URL(fileURLWithPath: imageLocation)
 
@@ -50,7 +50,7 @@ struct ControlCapture: ControlMessage {
     
     let videoAsset = await videoWindow.windowData.videoAsset
 
-    switch await videoAsset.frameGrab(at: captureTime, destination: imageLocation) {
+    switch await videoAsset.frameGrab(millis: captureTime, destination: imageLocation) {
       case .success(let grabTime):
         return ClientMessageCaptureDone(for: self, grabTime: grabTime)
 

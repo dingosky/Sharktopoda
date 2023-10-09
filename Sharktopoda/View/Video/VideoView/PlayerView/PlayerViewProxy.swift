@@ -16,7 +16,7 @@ extension PlayerView {
     nsPlayerView.clear(localizations: localizations)
   }
   
-  var currentTime: Int {
+  var currentTime: CMTime {
     windowData.videoControl.currentTime
   }
   

@@ -37,7 +37,6 @@ extension NSImage {
 
       return nil
     } catch {
-      
       return error
     }
   }

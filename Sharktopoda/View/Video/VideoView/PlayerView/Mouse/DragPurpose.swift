@@ -47,7 +47,7 @@ extension NSPlayerView {
       if 10 < totalDelta.x, 10 < totalDelta.y {
         switch purpose {
           case .create:
-            let localization = Localization(at: currentTime,
+            let localization = Localization(at: currentTime.asMillis,
                                             with: region(from: dragLayer),
                                             layer: dragLayer,
                                             fullSize: fullSize)
@@ -62,7 +62,7 @@ extension NSPlayerView {
             /// Remove the selection layer as it's purpose is complete
             dragLayer.removeFromSuperlayer()
             
-            localizationData.select(using: dragLayer.frame, at: currentTime)
+            localizationData.select(using: dragLayer.frame, at: currentTime.asMillis)
         }
       } else {
         dragLayer.removeFromSuperlayer()

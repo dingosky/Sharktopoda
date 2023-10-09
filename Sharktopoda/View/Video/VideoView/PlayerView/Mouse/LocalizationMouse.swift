@@ -84,7 +84,7 @@ extension NSPlayerView {
     guard showLocalizations else { return nil }
 
     let mousedLocalizations = localizationData
-      .fetch(spanning: currentTime)
+      .fetch(spanning: currentTime.asMillis)
       .filter { $0.layer.containsSuperPoint(point) }
     
     guard !mousedLocalizations.isEmpty else { return nil }

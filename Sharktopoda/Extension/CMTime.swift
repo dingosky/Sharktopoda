@@ -17,10 +17,15 @@ extension CMTime {
   }
   
   func to(_ timescale: Timescale) -> Int {
-    return Int(seconds * Double(timescale.rawValue))
+    guard !seconds.isNaN,
+          !seconds.isInfinite else {
+      return 0
+    }
+
+    return Int(seconds) * Int(timescale.rawValue)
   }
   
-  static func from(_ time: Double, in timescale: Timescale) -> CMTime {
+  static func from(_ time: Float, in timescale: Timescale) -> CMTime {
     guard !time.isNaN,
           !time.isInfinite else { return .zero }
 
